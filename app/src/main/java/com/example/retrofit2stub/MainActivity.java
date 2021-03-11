@@ -2,6 +2,8 @@ package com.example.retrofit2stub;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,12 +11,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,11 +36,16 @@ public class MainActivity extends AppCompatActivity {
         // пример содержимого веб-формы q=dogs+and+people&key=MYKEY&image_type=photo
         Call<Response> search(@Query("q") String q, @Query("key") String key, @Query("image_type") String image_type);
         // Тип ответа, действие, содержание запроса
+
+        @GET()
+        Call<ResponseBody> getImage (@Url String pictureURL);
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startSearch("yellow");
 
     }
 
@@ -47,13 +56,28 @@ public class MainActivity extends AppCompatActivity {
         // можно использовать экземпляр для нескольких API сразу
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL) // адрес API сервера
-                .addConverterFactory(GsonConverterFactory.create())
+           //     .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         // создаём обработчик, определённый интерфейсом PixabayAPI выше
         PixabayAPI api = retrofit.create(PixabayAPI.class);
 
+        Call<ResponseBody> getImage = api.getImage("https://cdn.pixabay.com/photo/2020/04/03/04/47/animal-4997424_150.jpg");
+        Callback<ResponseBody> imagecallback = new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                Bitmap bmp = BitmapFactory.decodeStream(response.body().byteStream());
+                Log.d("mytag", "size: " + bmp.getByteCount());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("mytag", "fail:" + t.getLocalizedMessage());
+            }
+        };
+        getImage.enqueue(imagecallback);
         // указываем, какую функцию API будем использовать
+        /*
         Call<Response> call = api.search(text, key, image_type);
 
         Callback<Response> callback = new Callback<Response>() {
@@ -76,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         call.enqueue(callback); // ставим запрос в очередь
+
+         */
 
     }
 
