@@ -36,5 +36,5 @@ dependencies {
     // лучше указать актуальные версии на данный момент
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+
 }

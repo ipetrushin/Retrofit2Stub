@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,9 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
     String API_URL = "https://pixabay.com/";
     String q = "bad dog";
-    String key = "16115131-f2ac4e59ef4204b7d06f11215";
+    // TODO: зарегистрироваться и вставить свой ключ
+    String key = "your key here";
     String image_type = "photo";
-    Picasso picasso;
+
+    // TODO: реализовать скачивание и отображение картинок, найденных по запросу
+    // TODO: добавить возможность выбора типа картинки (image_type)
 
     interface PixabayAPI {
         @GET("/api") // метод запроса (POST/GET) и путь к API
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        picasso = new Picasso.Builder(this).build();
+
     }
 
     public void startSearch(String text) {
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 // класс Response содердит поля, в которые будут записаны
                 // результаты поиска по картинкам
                 Response r = response.body(); // получили ответ в виде объекта
+                // TODO: отобразить, сколько картинок найдено
                 displayResults(r.hits);
                 Log.d("mytag", "hits:" + r.hits.length); // сколько картинок нашлось
             }
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Response> call, Throwable t) {
                 // обрабатываем ошибку, если она возникла
+                // TODO: при возникновении ошибки вывести Toast
                 Log.d("mytag", "Error: " + t.getLocalizedMessage());
             }
         };
@@ -77,16 +81,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void displayResults(Hit[] hits) {
         // вызывается, когда появятся результаты поиска
-        ImageView iv = findViewById(R.id.image);
-        picasso.load(hits[0].previewURL).into(iv);
-
 
     }
 
     public void onSearchClick(View v) {
-        EditText etSearch = findViewById(R.id.text);
-        String text = etSearch.getText().toString();
-        startSearch(text);
+
 
     }
 }
