@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     String API_URL = "https://pixabay.com/";
     String q = "bad dog";
     // TODO: зарегистрироваться и вставить свой ключ
-    String key = "your key here";
+    String key = "16115131-f2ac4e59ef4204b7d06f11215";
     String image_type = "photo";
 
     // TODO: реализовать скачивание и отображение картинок, найденных по запросу
@@ -37,15 +37,12 @@ public class MainActivity extends AppCompatActivity {
         Call<Response> search(@Query("q") String q, @Query("key") String key, @Query("image_type") String image_type);
         // Тип ответа, действие, содержание запроса
 
-        @GET()
-        Call<ResponseBody> getImage (@Url String pictureURL);
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startSearch("yellow");
+        startSearch("big+dog");
 
     }
 
@@ -56,29 +53,15 @@ public class MainActivity extends AppCompatActivity {
         // можно использовать экземпляр для нескольких API сразу
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL) // адрес API сервера
-           //     .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         // создаём обработчик, определённый интерфейсом PixabayAPI выше
         PixabayAPI api = retrofit.create(PixabayAPI.class);
 
-        Call<ResponseBody> getImage = api.getImage("https://cdn.pixabay.com/photo/2020/04/03/04/47/animal-4997424_150.jpg");
-        Callback<ResponseBody> imagecallback = new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                Bitmap bmp = BitmapFactory.decodeStream(response.body().byteStream());
-                Log.d("mytag", "size: " + bmp.getByteCount());
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("mytag", "fail:" + t.getLocalizedMessage());
-            }
-        };
-        getImage.enqueue(imagecallback);
         // указываем, какую функцию API будем использовать
-        /*
-        Call<Response> call = api.search(text, key, image_type);
+
+        Call<Response> call = api.search(text, key, image_type);  // создали запрос
 
         Callback<Response> callback = new Callback<Response>() {
             @Override
@@ -98,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
                 // TODO: при возникновении ошибки вывести Toast
                 Log.d("mytag", "Error: " + t.getLocalizedMessage());
             }
-        };
+        }; // обработка ответа
         call.enqueue(callback); // ставим запрос в очередь
 
-         */
+
 
     }
 
