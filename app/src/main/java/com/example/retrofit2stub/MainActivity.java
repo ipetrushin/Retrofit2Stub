@@ -25,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
     String API_URL = "https://pixabay.com/";
     String q = "bad dog";
     // TODO: зарегистрироваться и вставить свой ключ
-    String key = "16115131-f2ac4e59ef4204b7d06f11215";
+    String key = "your key here";
     String image_type = "photo";
 
-    // TODO: реализовать скачивание и отображение картинок, найденных по запросу
+    // TODO: реализовать скачивание и отображение картинок, найденных по запросу (Picasso)
     // TODO: добавить возможность выбора типа картинки (image_type)
 
     interface PixabayAPI {
